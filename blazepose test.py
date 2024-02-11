@@ -1,9 +1,13 @@
 import cv2
+import time
 import mediapipe as mp
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
+
+avg = 0
+count = 0
 
 cap = cv2.VideoCapture(0)
 with mp_pose.Pose(
@@ -15,8 +19,10 @@ with mp_pose.Pose(
             print("no video in frame")
             continue
 
+        start_time = time.time()
         image.flags.writeable = False
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
         result = pose.process(image)
 
         image.flags.writeable = True
@@ -29,9 +35,25 @@ with mp_pose.Pose(
             landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style()
         )
 
+        try:
+            landmarks = result.pose_landmarks.landmark
+            #print(landmarks)
+
+        except:
+            pass
+
+        #print(len(landmarks))
+        print(landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value])
+
         cv2.imshow('media pipe pose', cv2.flip(image, 1))
+        end_time = time.time()
+        fps = 1 / (end_time - start_time)
+        avg += fps
+        count += 1
+        #print(fps)
 
         if cv2.waitKey(5) & 0xFF == 27:
             break
 
+print("average fps is ", avg / count)
 cap.release()
