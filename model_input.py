@@ -29,7 +29,7 @@ def data_preprocessing(filename):
             elif i == 133:
                 Y_list.append(value)
             else:
-                line.append(value)
+                line.append(float(value))
         if flag == 0:
             X_list.append(line)
 

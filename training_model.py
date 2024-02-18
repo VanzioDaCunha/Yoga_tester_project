@@ -3,7 +3,6 @@ import numpy as np
 from model_input import data_preprocessing
 from LSTM_Model import create_model
 from keras.callbacks import EarlyStopping
-from keras.utils import plot_model
 
 
 sequence_length = 4
