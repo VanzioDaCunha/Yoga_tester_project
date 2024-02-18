@@ -31,14 +31,17 @@ train_set = train_set[:num_samples*4].reshape(-1, 4, 133)
 
 print(train_labels.shape)
 
+num_samples = train_labels.shape[0] // 4  # Calculate the number of samples after aggregation
+train_labels = train_labels[:num_samples*4].reshape(-1, 4, 8)
 
 print(train_labels.shape)
+print(train_labels)
 
 ip_shape = (sequence_length, num_features)
 classifier = create_model(ip_shape)
 
 early_stopping_callback = EarlyStopping(monitor='val_loss', patience=10, mode='min', restore_best_weights=True)
 
-train_history = classifier.fit(x=train_set, y=train_labels, epochs=50, batch_size=2,
+train_history = classifier.fit(x=train_set, y=train_labels, epochs=50, batch_size=4,
                                shuffle=False, validation_split=0.2,
                                callbacks=[early_stopping_callback])
