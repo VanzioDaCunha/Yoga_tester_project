@@ -1,9 +1,15 @@
+"""
+Created by Divya on 18/02/2024
+last modified: 18/02/2024 11:23
+"""
+
+
 import numpy as np
-from tensorflow.keras.utils import to_categorical
+from keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
 
-# Function takes csv file as an input and returns 2 Numpy arrays
 
+# Function takes csv file as an input and returns 2 Numpy arrays
 def data_preprocessing(filename):
     arr = []
     # Using loadtxt() to write data from csv file to arr list
@@ -27,21 +33,14 @@ def data_preprocessing(filename):
         if flag == 0:
             X_list.append(line)
 
-    print(len(X_list))
-    print(len(Y_list))
-
     # converting list to Numpy array
     x = np.array(X_list)
     y = np.array(Y_list)
 
+    # Use LabelEncoder to convert string labels to integers
+    label_encoder = LabelEncoder()
+    y = label_encoder.fit_transform(y)
+
+    y = to_categorical(y)
+
     return x, y
-
-# Use LabelEncoder to convert string labels to integers
-label_encoder = LabelEncoder()
-y = label_encoder.fit_transform(y)
-
-y = to_categorical(y)
-print(y)
-
-# Inspect the mapping between original labels and encoded labels
-print("class labels : ", label_encoder.classes_)

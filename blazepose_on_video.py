@@ -13,7 +13,7 @@ count = 0
 
 annotations = read_csv_file('1.csv')
 
-cap = cv2.VideoCapture("1.mp4")
+cap = cv2.VideoCapture("d3.mp4")
 
 with mp_pose.Pose(
         model_complexity=0,
@@ -46,7 +46,7 @@ with mp_pose.Pose(
         )
 
         # Write key points to csv file
-        write_key(result, frame_time, activity)
+        # write_key(result, frame_time, activity)
 
         # Displays the result to the Screen
         cv2.imshow('media pipe pose', cv2.flip(image, 1))

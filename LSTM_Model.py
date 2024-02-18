@@ -20,18 +20,18 @@ def create_model(input_shape):
     model.add(Dense(64, activation='tanh'))
     model.add(LSTM(32, activation='tanh', return_sequences=True, return_state=False))
 
-    model.add(Dense(6, activation='softmax'))
+    model.add(Dense(8, activation='softmax'))
     ######################################################################################
 
     # This line builds the model architecture
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-    print(model.summary())
+    # print(model.summary())
 
     return model
 
 
-sequence_length = 5
+sequence_length = 4
 num_features = 133
 ip_shape = (sequence_length, num_features)
 a = create_model(ip_shape)
