@@ -1,7 +1,8 @@
 import cv2
 import time
 import mediapipe as mp
-from annotations_input import read_csv_file
+from annotations_input import read_csv_file, get_time
+from annotations_output import write_key
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -10,7 +11,9 @@ mp_pose = mp.solutions.pose
 avg = 0
 count = 0
 
-cap = cv2.VideoCapture("3.mp4")
+annotations = read_csv_file('1.csv')
+
+cap = cv2.VideoCapture("1.mp4")
 
 with mp_pose.Pose(
         model_complexity=0,
@@ -20,7 +23,11 @@ with mp_pose.Pose(
         success, image = cap.read()
         if not success:
             print("no video in frame")
-            continue
+            break
+
+        frame_time = cap.get(0)/1000
+        activity = get_time(annotations, frame_time)
+        print(frame_time, "   ", activity)
 
         start_time = time.time()
         image.flags.writeable = False
@@ -38,7 +45,13 @@ with mp_pose.Pose(
             landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style()
         )
 
+        # Write key points to csv file
+        write_key(result, frame_time, activity)
+
+        # Displays the result to the Screen
         cv2.imshow('media pipe pose', cv2.flip(image, 1))
+
+        # Calculate the Average fps of the model
         end_time = time.time()
         fps = 1 / (end_time - start_time)
         avg += fps
