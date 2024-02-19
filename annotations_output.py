@@ -48,7 +48,7 @@ header_list = ['Timestamp',
 
 # Function takes input of the results class and will add all the keypoint data to the csv file
 # Also take input for timestamp and the output class
-def write_key(results, time=0, activity='no activity'):
+def write_key(results, time=0, activity=''):
     # Open CSV file for writing (replace 'output.csv' with your desired filename)
     with open('output.csv', 'a') as file:
         writer = csv.writer(file)

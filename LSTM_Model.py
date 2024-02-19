@@ -22,7 +22,7 @@ def create_model(input_shape):
     model.add(Dense(32, activation='tanh'))
     model.add(LSTM(32, activation='tanh', return_sequences=True, return_state=False))
 
-    model.add(Dense(8, activation='softmax'))
+    model.add(Dense(9, activation='softmax'))
 
     ######################################################################################
 
@@ -33,8 +33,3 @@ def create_model(input_shape):
 
     return model
 
-
-sequence_length = 4
-num_features = 133
-ip_shape = (sequence_length, num_features)
-a = create_model(ip_shape)

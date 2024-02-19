@@ -17,7 +17,7 @@ for i in train_files:
     train_labels = np.concatenate((train_labels, b))
 
 test_files = []
-test_set, test_labels = data_preprocessing('output.csv')
+test_set, test_labels = data_preprocessing('output2.csv')
 
 for i in test_files:
     a, b = data_preprocessing(i)
