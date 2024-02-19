@@ -4,6 +4,8 @@ import mediapipe as mp
 import numpy as np
 import tensorflow as tf
 from keras.models import load_model
+from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH
+
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -12,7 +14,7 @@ mp_pose = mp.solutions.pose
 avg = 0
 count = 0
 label = 'null'
-keypoints = np.empty((1, 133))
+keypoints = np.empty((1, MODEL_INPUT))
 init_time = time.time()
 
 cap = cv2.VideoCapture(0)
@@ -56,7 +58,7 @@ with mp_pose.Pose(
                     data.append(float(landmark.z))
                     data.append(float(landmark.visibility))
             data = np.array(data)
-            data = data.reshape(-1, 133)
+            data = data.reshape(-1, MODEL_INPUT)
             keypoints = np.concatenate((keypoints, data))
 
         else:
@@ -74,13 +76,13 @@ with mp_pose.Pose(
                     data.append(float(landmark.z))
                     data.append(float(landmark.visibility))
             data = np.array(data)
-            data = data.reshape(-1, 133)
+            data = data.reshape(-1, MODEL_INPUT)
             keypoints = np.concatenate((keypoints, data))
             print(keypoints.shape)
             # using the model to classify
 
             num_samples = keypoints.shape[0] // 4  # Calculate the number of samples after aggregation
-            keypoints = keypoints[:num_samples * 4].reshape(-1, 4, 133)
+            keypoints = keypoints[:num_samples * 4].reshape(-1, 4, MODEL_INPUT)
 
             model_path = 'modelname.h5'
             classifier = load_model(model_path)

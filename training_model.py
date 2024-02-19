@@ -3,10 +3,10 @@ import numpy as np
 from model_input import data_preprocessing
 from LSTM_Model import create_model
 from keras.callbacks import EarlyStopping
+from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH
 
-
-sequence_length = 4
-num_features = 133
+sequence_length = SEQUENCE_LENGTH
+num_features = MODEL_INPUT
 
 train_files = []
 train_set, train_labels = data_preprocessing('output1.csv')
@@ -25,10 +25,10 @@ for i in test_files:
     test_labels = np.concatenate((test_labels, b))
 
 num_samples = train_set.shape[0] // 4  # Calculate the number of samples after aggregation
-train_set = train_set[:num_samples*4].reshape(-1, 4, 133)
+train_set = train_set[:num_samples*4].reshape(-1, 4, MODEL_INPUT)
 
 num_samples = train_labels.shape[0] // 4  # Calculate the number of samples after aggregation
-train_labels = train_labels[:num_samples*4].reshape(-1, 4, 9)
+train_labels = train_labels[:num_samples*4].reshape(-1, 4, CLASS_OUTPUT)
 
 
 ip_shape = (sequence_length, num_features)
@@ -41,10 +41,10 @@ train_history = classifier.fit(x=train_set, y=train_labels, epochs=50, batch_siz
                                callbacks=[early_stopping_callback])
 
 num_samples = test_set.shape[0] // 4  # Calculate the number of samples after aggregation
-test_set = test_set[:num_samples*4].reshape(-1, 4, 133)
+test_set = test_set[:num_samples*4].reshape(-1, 4, MODEL_INPUT)
 
 num_samples = test_labels.shape[0] // 4  # Calculate the number of samples after aggregation
-test_labels = test_labels[:num_samples*4].reshape(-1, 4, 9)
+test_labels = test_labels[:num_samples*4].reshape(-1, 4, CLASS_OUTPUT)
 
 test_history = classifier.evaluate(test_set, test_labels)
 

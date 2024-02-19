@@ -7,6 +7,7 @@ last modified: 18/02/2024 11:23
 import numpy as np
 from keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
+from constants import MODEL_INPUT
 
 
 # Function takes csv file as an input and returns 2 Numpy arrays
@@ -26,7 +27,7 @@ def data_preprocessing(filename):
             if value == '':
                 flag = 1
                 break
-            elif i == 133:
+            elif i == MODEL_INPUT:
                 Y_list.append(value)
             else:
                 line.append(float(value))
@@ -42,5 +43,6 @@ def data_preprocessing(filename):
     y = label_encoder.fit_transform(y)
 
     y = to_categorical(y)
-
     return x, y
+
+data_preprocessing('output.csv')
