@@ -1,0 +1,5 @@
+
+# define all constants
+MODEL_INPUT = 133
+CLASS_OUTPUT = 9
+SEQUENCE_LENGTH = 4
