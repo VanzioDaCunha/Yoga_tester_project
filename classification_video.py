@@ -2,9 +2,9 @@ import cv2
 import time
 import mediapipe as mp
 import numpy as np
-import tensorflow as tf
+from sklearn.preprocessing import LabelEncoder
 from keras.models import load_model
-from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH
+from constants import MODEL_INPUT, LABELS
 
 
 mp_drawing = mp.solutions.drawing_utils
@@ -17,7 +17,14 @@ label = 'null'
 keypoints = np.empty((1, MODEL_INPUT))
 init_time = time.time()
 
+model_path = 'modelname.keras'
+classifier = load_model(model_path)
+
+label_encoder = LabelEncoder()
+label_encoder.fit(LABELS)
+
 cap = cv2.VideoCapture(0)
+time.sleep(1)
 
 with mp_pose.Pose(
         model_complexity=0,
@@ -48,6 +55,7 @@ with mp_pose.Pose(
         frame_time = init_time - start_time
 
         if count < 4:
+            time.sleep(0.1)
             data = [frame_time]
 
             # Iterate over landmarks
@@ -82,16 +90,16 @@ with mp_pose.Pose(
             num_samples = keypoints.shape[0] // 4  # Calculate the number of samples after aggregation
             keys = keypoints[:num_samples * 4].reshape(-1, 4, MODEL_INPUT)
 
-            model_path = 'modelname.keras'
-            classifier = load_model(model_path)
             label = classifier.predict(keys)
+            # to get the class label
+            cat = np.array(label[0][0])
+            index = np.argmax(cat)
+
+            # cat = label_encoder.inverse_transform(cat)
+            print("output      ", LABELS[index])
 
         # Displays the result to the Screen
         cv2.imshow('media pipe pose', cv2.flip(image, 1))
-
-        # to get the class label
-
-        print("output ", label)
 
         # Calculate the Average fps of the model
         end_time = time.time()

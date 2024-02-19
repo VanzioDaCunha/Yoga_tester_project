@@ -7,13 +7,13 @@ last modified: 18/02/2024 11:23
 import numpy as np
 from keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
-from constants import MODEL_INPUT
+from constants import MODEL_INPUT, LABELS
 
 
 # Function takes csv file as an input and returns 2 Numpy arrays
 def data_preprocessing(filename):
     arr = []
-    # Using loadtxt() to write data from csv file to arr list
+    # Using load txt() to write data from csv file to arr list
     arr = np.loadtxt(filename, delimiter=",", dtype=str)
 
     # X_list to store current time along with keypoints
@@ -40,7 +40,8 @@ def data_preprocessing(filename):
 
     # Use LabelEncoder to convert string labels to integers
     label_encoder = LabelEncoder()
-    y = label_encoder.fit_transform(y)
+    label_encoder.fit(LABELS)
 
+    y = label_encoder.transform(y)
     y = to_categorical(y)
     return x, y
