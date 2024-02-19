@@ -8,7 +8,7 @@ from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH
 sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
-train_files = []
+train_files = ['output3.csv', 'output4.csv', 'output5.csv']
 train_set, train_labels = data_preprocessing('output1.csv')
 
 for i in train_files:

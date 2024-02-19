@@ -44,5 +44,3 @@ def data_preprocessing(filename):
 
     y = to_categorical(y)
     return x, y
-
-data_preprocessing('output.csv')
