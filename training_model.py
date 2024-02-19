@@ -8,7 +8,7 @@ from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH
 sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
-train_files = ['output3.csv', 'output4.csv', 'output5.csv']
+train_files = ['output3.csv', 'output4.csv', 'output5.csv', 'output11.csv', 'output12.csv']
 train_set, train_labels = data_preprocessing('output1.csv')
 
 for i in train_files:
@@ -16,7 +16,7 @@ for i in train_files:
     train_set = np.concatenate((train_set, a))
     train_labels = np.concatenate((train_labels, b))
 
-test_files = []
+test_files = ['output13.csv']
 test_set, test_labels = data_preprocessing('output2.csv')
 
 for i in test_files:
@@ -48,4 +48,4 @@ test_labels = test_labels[:num_samples*4].reshape(-1, 4, CLASS_OUTPUT)
 
 test_history = classifier.evaluate(test_set, test_labels)
 
-classifier.save('modelname')
+classifier.save('modelname.keras')

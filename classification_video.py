@@ -64,8 +64,6 @@ with mp_pose.Pose(
         else:
             # converts the key points data into data frames for classifier
             keypoints = np.delete(keypoints, 0, axis=0)
-            keypoints = np.delete(keypoints, 0, axis=0)
-
             data = [frame_time]
 
             # Iterate over landmarks
@@ -77,22 +75,23 @@ with mp_pose.Pose(
                     data.append(float(landmark.visibility))
             data = np.array(data)
             data = data.reshape(-1, MODEL_INPUT)
+
             keypoints = np.concatenate((keypoints, data))
-            print(keypoints.shape)
             # using the model to classify
 
             num_samples = keypoints.shape[0] // 4  # Calculate the number of samples after aggregation
-            keypoints = keypoints[:num_samples * 4].reshape(-1, 4, MODEL_INPUT)
+            keys = keypoints[:num_samples * 4].reshape(-1, 4, MODEL_INPUT)
 
-            model_path = 'modelname.h5'
+            model_path = 'modelname.keras'
             classifier = load_model(model_path)
-            label = classifier.predict(keypoints)
-
-
+            label = classifier.predict(keys)
 
         # Displays the result to the Screen
         cv2.imshow('media pipe pose', cv2.flip(image, 1))
-        print(label)
+
+        # to get the class label
+
+        print("output ", label)
 
         # Calculate the Average fps of the model
         end_time = time.time()
