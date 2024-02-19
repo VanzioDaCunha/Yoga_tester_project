@@ -44,8 +44,8 @@ def get_time(data, current_time):
 
     # to check if dictionary is empty
     if val.__len__() == 0:
-        return 'No Activity'
-    key = val['Activity']
+        return ''
+    key = val['TEMPORAL-SEGMENTS']
 
     return key
 

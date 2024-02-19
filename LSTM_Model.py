@@ -19,6 +19,7 @@ def create_model(input_shape):
     model.add(TimeDistributed(Dense(133, activation='tanh'), input_shape=input_shape))
 
     model.add(Dense(64, activation='tanh'))
+    model.add(Dense(32, activation='tanh'))
     model.add(LSTM(32, activation='tanh', return_sequences=True, return_state=False))
 
     model.add(Dense(8, activation='softmax'))

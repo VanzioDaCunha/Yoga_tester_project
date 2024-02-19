@@ -72,7 +72,7 @@ def write_key(results, time=0, activity='no activity'):
 def init_file(file):
     # checks if the file already exists
     if not os.path.isfile(file):
-        with open('output.csv', 'w', newline='') as file:
+        with open('output1.csv', 'w', newline='') as file:
             writer = csv.writer(file)
 
             # Write header row (adjust columns based on your data)
