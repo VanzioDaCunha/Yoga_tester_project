@@ -11,9 +11,9 @@ mp_pose = mp.solutions.pose
 avg = 0
 count = 0
 
-annotations = read_csv_file('6.csv')
+annotations = read_csv_file('13.csv')
 
-cap = cv2.VideoCapture("6.mp4")
+cap = cv2.VideoCapture("13.mp4")
 
 with mp_pose.Pose(
         model_complexity=0,
