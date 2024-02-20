@@ -23,7 +23,7 @@ classifier = load_model(model_path)
 label_encoder = LabelEncoder()
 label_encoder.fit(LABELS)
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture('3.mp4')
 time.sleep(1)
 
 with mp_pose.Pose(
@@ -54,7 +54,7 @@ with mp_pose.Pose(
 
         frame_time = init_time - start_time
 
-        if count < 4:
+        if 4 < count < 8:
             time.sleep(0.1)
             data = [frame_time]
 
@@ -69,7 +69,7 @@ with mp_pose.Pose(
             data = data.reshape(-1, MODEL_INPUT)
             keypoints = np.concatenate((keypoints, data))
 
-        else:
+        elif 8 < count:
             # converts the key points data into data frames for classifier
             keypoints = np.delete(keypoints, 0, axis=0)
             data = [frame_time]
@@ -93,6 +93,7 @@ with mp_pose.Pose(
             label = classifier.predict(keys)
             # to get the class label
             cat = np.array(label[0][0])
+            # print(cat)
             index = np.argmax(cat)
 
             # cat = label_encoder.inverse_transform(cat)
