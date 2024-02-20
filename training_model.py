@@ -24,8 +24,6 @@ for i in test_files:
     test_set = np.concatenate((test_set, a))
     test_labels = np.concatenate((test_labels, b))
 
-np.set_printoptions(threshold=np.inf)
-print(train_labels)
 
 num_samples = train_set.shape[0] // SEQUENCE_LENGTH  # Calculate the number of samples after aggregation
 train_set = train_set[:num_samples*SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, MODEL_INPUT)

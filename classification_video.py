@@ -94,12 +94,10 @@ with mp_pose.Pose(
             label = classifier.predict(keys)
             # to get the class label
             cat = np.array(label[0][0])
-            # print(cat)
-            print(cat)
+
             index = np.argmax(cat)
 
             # cat = label_encoder.inverse_transform(cat)
-            print("output      ", LABELS[index])
             keypoints = np.empty((1, MODEL_INPUT))
 
         text_size = 0.5
