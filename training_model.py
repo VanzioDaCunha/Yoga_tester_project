@@ -24,6 +24,9 @@ for i in test_files:
     test_set = np.concatenate((test_set, a))
     test_labels = np.concatenate((test_labels, b))
 
+np.set_printoptions(threshold=np.inf)
+print(train_labels)
+
 num_samples = train_set.shape[0] // SEQUENCE_LENGTH  # Calculate the number of samples after aggregation
 train_set = train_set[:num_samples*SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, MODEL_INPUT)
 
@@ -34,9 +37,9 @@ train_labels = train_labels[:num_samples*SEQUENCE_LENGTH].reshape(-1, SEQUENCE_L
 ip_shape = (sequence_length, num_features)
 classifier = create_model(ip_shape)
 
-early_stopping_callback = EarlyStopping(monitor='val_loss', patience=10, mode='min', restore_best_weights=True)
+early_stopping_callback = EarlyStopping(monitor='val_loss', patience=20, mode='min', restore_best_weights=False)
 
-train_history = classifier.fit(x=train_set, y=train_labels, epochs=50, batch_size=4,
+train_history = classifier.fit(x=train_set, y=train_labels, epochs=100, batch_size=4,
                                shuffle=False, validation_split=0.2,
                                callbacks=[early_stopping_callback])
 

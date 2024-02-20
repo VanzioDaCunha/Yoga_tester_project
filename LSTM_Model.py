@@ -6,6 +6,8 @@ last modified: 18/02/2024 11:23
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, TimeDistributed
 from constants import MODEL_INPUT, CLASS_OUTPUT
+from keras.optimizers import Adam
+from keras.losses import categorical_crossentropy as sparse
 
 
 # Function create an tensor flow model structure which can be called and trained on
@@ -17,18 +19,18 @@ def create_model(input_shape):
     # layers in the model
     #####################################################################################
 
-    model.add(TimeDistributed(Dense(MODEL_INPUT, activation='tanh'), input_shape=input_shape))
+    model.add(TimeDistributed(Dense(MODEL_INPUT, activation='relu'), input_shape=input_shape))
+    model.add(Dense(64, activation='relu'))
+    model.add(TimeDistributed(Dense(32, activation='relu')))
 
-    model.add(TimeDistributed(Dense(64, activation='tanh')))
-
-    model.add(LSTM(32, activation='tanh', return_sequences=True, return_state=False))
+    model.add(LSTM(32, activation='relu', return_sequences=True, return_state=False))
 
     model.add(Dense(CLASS_OUTPUT, activation='softmax'))
 
     ######################################################################################
 
     # This line builds the model architecture
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=Adam(), loss=sparse, metrics=['accuracy'])
 
     # print(model.summary())
 

@@ -12,10 +12,12 @@ mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
 avg = 0
-count = 0
+count = 1
+index = 0
 label = 'null'
 keypoints = np.empty((1, MODEL_INPUT))
 init_time = time.time()
+
 
 model_path = 'modelname.keras'
 classifier = load_model(model_path)
@@ -23,7 +25,7 @@ classifier = load_model(model_path)
 label_encoder = LabelEncoder()
 label_encoder.fit(LABELS)
 
-cap = cv2.VideoCapture('3.mp4')
+cap = cv2.VideoCapture('10.mp4')
 time.sleep(1)
 
 with mp_pose.Pose(
@@ -54,7 +56,7 @@ with mp_pose.Pose(
 
         frame_time = init_time - start_time
 
-        if 4 < count < 8:
+        if count % 4 != 0:
             time.sleep(0.1)
             data = [frame_time]
 
@@ -69,8 +71,7 @@ with mp_pose.Pose(
             data = data.reshape(-1, MODEL_INPUT)
             keypoints = np.concatenate((keypoints, data))
 
-        elif 8 < count:
-            # converts the key points data into data frames for classifier
+        else:
             keypoints = np.delete(keypoints, 0, axis=0)
             data = [frame_time]
 
@@ -94,13 +95,40 @@ with mp_pose.Pose(
             # to get the class label
             cat = np.array(label[0][0])
             # print(cat)
+            print(cat)
             index = np.argmax(cat)
 
             # cat = label_encoder.inverse_transform(cat)
             print("output      ", LABELS[index])
+            keypoints = np.empty((1, MODEL_INPUT))
+
+        text_size = 0.5
+        text_thickness = 2
+        text_position = (10, 30)
 
         # Displays the result to the Screen
-        cv2.imshow('media pipe pose', cv2.flip(image, 1))
+        image = cv2.flip(image, 1)
+
+        # Draw black outline for the text
+        outline_thickness = 2
+        cv2.putText(image, LABELS[index], (text_position[0] - outline_thickness, text_position[1]),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    text_size, (0, 0, 0), text_thickness + 2, cv2.LINE_AA)
+        cv2.putText(image, LABELS[index], (text_position[0] + outline_thickness, text_position[1]),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    text_size, (0, 0, 0), text_thickness + 2, cv2.LINE_AA)
+        cv2.putText(image, LABELS[index], (text_position[0], text_position[1] - outline_thickness),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    text_size, (0, 0, 0), text_thickness + 2, cv2.LINE_AA)
+        cv2.putText(image, LABELS[index], (text_position[0], text_position[1] + outline_thickness),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    text_size, (0, 0, 0), text_thickness + 2, cv2.LINE_AA)
+
+        # Draw the original text
+        cv2.putText(image, LABELS[index], text_position, cv2.FONT_HERSHEY_SIMPLEX,
+                    text_size, (0, 255, 0), text_thickness, cv2.LINE_AA)
+
+        cv2.imshow('media pipe pose', image)
 
         # Calculate the Average fps of the model
         end_time = time.time()
