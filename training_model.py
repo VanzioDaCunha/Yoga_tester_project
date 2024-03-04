@@ -8,7 +8,8 @@ from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH
 sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
-train_files = ['output3.csv', 'output4.csv', 'output5.csv', 'output11.csv', 'output12.csv']
+train_files = ['output3.csv', 'output4.csv', 'output5.csv', 'output7.csv', 'output12.csv', 'output13.csv'
+               , 'output2.csv', 'output8.csv', 'output10.csv']
 train_set, train_labels = data_preprocessing('output1.csv')
 
 for i in train_files:
@@ -16,8 +17,8 @@ for i in train_files:
     train_set = np.concatenate((train_set, a))
     train_labels = np.concatenate((train_labels, b))
 
-test_files = ['output13.csv']
-test_set, test_labels = data_preprocessing('output2.csv')
+test_files = []
+test_set, test_labels = data_preprocessing('output11.csv')
 
 for i in test_files:
     a, b = data_preprocessing(i)
@@ -32,12 +33,23 @@ num_samples = train_labels.shape[0] // SEQUENCE_LENGTH  # Calculate the number o
 train_labels = train_labels[:num_samples*SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, CLASS_OUTPUT)
 
 
+num_samples = train_set.shape[0]
+indices = np.arange(num_samples)
+np.random.shuffle(indices)
+
+# Use the shuffled indices to shuffle the data
+train_set = train_set[indices]
+train_labels = train_labels[indices]
+
+print(train_labels)
+
+
 ip_shape = (sequence_length, num_features)
 classifier = create_model(ip_shape)
 
-early_stopping_callback = EarlyStopping(monitor='val_loss', patience=20, mode='min', restore_best_weights=False)
+early_stopping_callback = EarlyStopping(monitor='val_loss', patience=30, mode='min', restore_best_weights=False)
 
-train_history = classifier.fit(x=train_set, y=train_labels, epochs=100, batch_size=4,
+train_history = classifier.fit(x=train_set, y=train_labels, epochs=150, batch_size=4,
                                shuffle=False, validation_split=0.2,
                                callbacks=[early_stopping_callback])
 

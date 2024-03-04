@@ -4,7 +4,7 @@ import mediapipe as mp
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from keras.models import load_model
-from constants import MODEL_INPUT, LABELS
+from constants import MODEL_INPUT, LABELS, SEQUENCE_LENGTH
 
 
 mp_drawing = mp.solutions.drawing_utils
@@ -21,11 +21,12 @@ init_time = time.time()
 
 model_path = 'modelname.keras'
 classifier = load_model(model_path)
+classifier.summary()
 
 label_encoder = LabelEncoder()
 label_encoder.fit(LABELS)
 
-cap = cv2.VideoCapture('10.mp4')
+cap = cv2.VideoCapture('11.mp4')
 time.sleep(1)
 
 with mp_pose.Pose(
@@ -54,42 +55,50 @@ with mp_pose.Pose(
             landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style()
         )
 
-        frame_time = init_time - start_time
-
-        if count % 4 != 0:
+        if count % SEQUENCE_LENGTH != 0:
             time.sleep(0.1)
-            data = [frame_time]
+            # data = [frame_time]
+            data = []
 
             # Iterate over landmarks
             if result.pose_landmarks:
                 for landmark in result.pose_landmarks.landmark:
                     data.append(float(landmark.x))
                     data.append(float(landmark.y))
-                    data.append(float(landmark.z))
-                    data.append(float(landmark.visibility))
+                    # data.append(float(landmark.z))
+                    # data.append(float(landmark.visibility))
+                    if landmark.visibility > 0.5:
+                        data.append(1)
+                    else:
+                        data.append(0)
             data = np.array(data)
             data = data.reshape(-1, MODEL_INPUT)
             keypoints = np.concatenate((keypoints, data))
 
         else:
             keypoints = np.delete(keypoints, 0, axis=0)
-            data = [frame_time]
+            # data = [frame_time]
+            data = []
 
             # Iterate over landmarks
             if result.pose_landmarks:
                 for landmark in result.pose_landmarks.landmark:
                     data.append(float(landmark.x))
                     data.append(float(landmark.y))
-                    data.append(float(landmark.z))
-                    data.append(float(landmark.visibility))
+                    # data.append(float(landmark.z))
+                    # data.append(float(landmark.visibility))
+                    if landmark.visibility > 0.5:
+                        data.append(1)
+                    else:
+                        data.append(0)
             data = np.array(data)
             data = data.reshape(-1, MODEL_INPUT)
 
             keypoints = np.concatenate((keypoints, data))
             # using the model to classify
 
-            num_samples = keypoints.shape[0] // 4  # Calculate the number of samples after aggregation
-            keys = keypoints[:num_samples * 4].reshape(-1, 4, MODEL_INPUT)
+            num_samples = keypoints.shape[0] // SEQUENCE_LENGTH  # Calculate the number of samples after aggregation
+            keys = keypoints[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, MODEL_INPUT)
 
             label = classifier.predict(keys)
             # to get the class label

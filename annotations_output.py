@@ -50,18 +50,23 @@ header_list = ['Timestamp',
 # Also take input for timestamp and the output class
 def write_key(results, time=0, activity=''):
     # Open CSV file for writing (replace 'output.csv' with your desired filename)
-    with open('output.csv', 'a') as file:
+    with open('output13.csv', 'a', newline='') as file:
         writer = csv.writer(file)
 
-        data = [time]
+        # data = [time]
+        data = []
 
         # Iterate over landmarks
         if results.pose_landmarks:
             for landmark in results.pose_landmarks.landmark:
-                data.append(landmark.x)
-                data.append(landmark.y)
-                data.append(landmark.z)
-                data.append(landmark.visibility)
+                data.append(float(landmark.x))
+                data.append(float(landmark.y))
+                # data.append(landmark.z)
+                if landmark.visibility > 0.5:
+                    data.append(1)
+                else:
+                    data.append(0)
+                # data.append(landmark.visibility)
             data.append(activity)
 
         # Write landmark data to CSV

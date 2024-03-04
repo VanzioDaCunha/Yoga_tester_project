@@ -4,7 +4,7 @@ last modified: 18/02/2024 11:23
 """
 
 from keras.models import Sequential
-from keras.layers import LSTM, Dense, TimeDistributed
+from keras.layers import LSTM, Dense, TimeDistributed, BatchNormalization
 from constants import MODEL_INPUT, CLASS_OUTPUT
 from keras.optimizers import Adam
 from keras.losses import categorical_crossentropy as sparse
@@ -20,11 +20,12 @@ def create_model(input_shape):
     #####################################################################################
 
     model.add(TimeDistributed(Dense(MODEL_INPUT, activation='relu'), input_shape=input_shape))
+
+    model.add(Dense(128, activation='relu'))
     model.add(Dense(64, activation='relu'))
-    model.add(TimeDistributed(Dense(32, activation='relu')))
+    model.add(Dense(32, activation='relu'))
 
-    model.add(LSTM(32, activation='relu', return_sequences=True, return_state=False))
-
+    model.add(LSTM(CLASS_OUTPUT, activation='relu', return_sequences=True, return_state=False))
     model.add(Dense(CLASS_OUTPUT, activation='softmax'))
 
     ######################################################################################
