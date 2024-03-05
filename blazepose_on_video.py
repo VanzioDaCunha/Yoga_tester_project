@@ -3,6 +3,8 @@ import time
 import mediapipe as mp
 from annotations_input import read_csv_file, get_time
 from annotations_output import write_key
+from constants import CSV_FILE, CSV_FILE_PATH
+from constants import VIDEO_FILE, VIDEO_FILE_PATH
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -11,9 +13,9 @@ mp_pose = mp.solutions.pose
 avg = 0
 count = 0
 
-annotations = read_csv_file('13.csv')
+annotations = read_csv_file(CSV_FILE_PATH + CSV_FILE)
+cap = cv2.VideoCapture(VIDEO_FILE_PATH + VIDEO_FILE)
 
-cap = cv2.VideoCapture("13.mp4")
 with mp_pose.Pose(
         model_complexity=0,
         min_detection_confidence=0.5,

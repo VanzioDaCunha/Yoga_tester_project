@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from keras.models import load_model
 from constants import MODEL_INPUT, LABELS, SEQUENCE_LENGTH
+from constants import VIDEO_FILE, VIDEO_FILE_PATH
 
 
 mp_drawing = mp.solutions.drawing_utils
@@ -26,7 +27,7 @@ classifier.summary()
 label_encoder = LabelEncoder()
 label_encoder.fit(LABELS)
 
-cap = cv2.VideoCapture('11.mp4')
+cap = cv2.VideoCapture(VIDEO_FILE_PATH + VIDEO_FILE)
 time.sleep(1)
 
 with mp_pose.Pose(
