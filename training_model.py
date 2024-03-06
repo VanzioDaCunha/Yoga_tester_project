@@ -7,8 +7,8 @@ from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH
 sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
-train_files = ['output3.csv', 'output4.csv', 'output5.csv', 'output7.csv', 'output12.csv', 'output13.csv'
-    , 'output2.csv', 'output8.csv', 'output10.csv']
+train_files = ['output3.csv', 'output4.csv', 'output5.csv', 'output7.csv', 'output12.csv',
+               'output13.csv', 'output2.csv', 'output8.csv', 'output10.csv']
 train_set, train_labels = data_preprocessing('output1.csv')
 
 for i in train_files:
@@ -38,8 +38,6 @@ np.random.shuffle(indices)
 train_set = train_set[indices]
 train_labels = train_labels[indices]
 
-print(train_labels)
-
 ip_shape = (sequence_length, num_features)
 classifier = create_model(ip_shape)
 
@@ -57,4 +55,4 @@ test_labels = test_labels[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_L
 
 test_history = classifier.evaluate(test_set, test_labels)
 
-classifier.save('TreePose.keras')
+classifier.save('Trikonasana.keras')

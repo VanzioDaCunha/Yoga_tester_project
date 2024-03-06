@@ -37,6 +37,7 @@ def data_preprocessing(filename):
     # converting list to Numpy array
     x = np.array(X_list)
     y = np.array(Y_list)
+    z = np.unique(y)
 
     # Use LabelEncoder to convert string labels to integers
     label_encoder = LabelEncoder()

@@ -8,8 +8,8 @@ mp_pose = mp.solutions.pose
 
 avg = 0
 count = 0
-
-cap = cv2.VideoCapture(0)
+file = 'Dataset/Yoga/Trikonasana/Videos/1.mp4'
+cap = cv2.VideoCapture(file)
 with mp_pose.Pose(
         min_detection_confidence=0.5,
         min_tracking_confidence=0.5) as pose:
@@ -21,8 +21,9 @@ with mp_pose.Pose(
 
         start_time = time.time()
         image.flags.writeable = False
+
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        # image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        image = cv2.resize(image, (500, 700))
         result = pose.process(image)
 
         image.flags.writeable = True

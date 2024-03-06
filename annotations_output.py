@@ -6,6 +6,7 @@ last modified: 11/02/2024 22:37
 
 import csv
 import os
+from constants import OUTPUT_FILE, OUTPUT_FILE_PATH
 
 # header list and the format for the output file
 header_list = ['Timestamp',
@@ -50,7 +51,8 @@ header_list = ['Timestamp',
 # Also take input for timestamp and the output class
 def write_key(results, time=0, activity=''):
     # Open CSV file for writing (replace 'output.csv' with your desired filename)
-    with open('output13.csv', 'a', newline='') as file:
+    fname = OUTPUT_FILE_PATH + OUTPUT_FILE
+    with open(fname, 'a', newline='') as file:
         writer = csv.writer(file)
 
         # data = [time]
@@ -77,7 +79,8 @@ def write_key(results, time=0, activity=''):
 def init_file(file):
     # checks if the file already exists
     if not os.path.isfile(file):
-        with open('output1.csv', 'w', newline='') as file:
+        fname = OUTPUT_FILE_PATH + OUTPUT_FILE
+        with open(fname, 'w', newline='') as file:
             writer = csv.writer(file)
 
             # Write header row (adjust columns based on your data)
