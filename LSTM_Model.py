@@ -4,7 +4,7 @@ last modified: 18/02/2024 11:23
 """
 
 from keras.models import Sequential
-from keras.layers import LSTM, Dense, TimeDistributed
+from keras.layers import LSTM, Dense, TimeDistributed, Dropout
 from constants import MODEL_INPUT, CLASS_OUTPUT
 from keras.optimizers import Adam
 from keras.losses import categorical_crossentropy as sparse

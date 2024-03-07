@@ -8,10 +8,12 @@ import numpy as np
 from keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
 from constants import MODEL_INPUT, LABELS
+from constants import OUTPUT_FILE_PATH
 
 
 # Function takes csv file as an input and returns 2 Numpy arrays
 def data_preprocessing(filename):
+    filename = OUTPUT_FILE_PATH + filename
     arr = []
     # Using load txt() to write data from csv file to arr list
     arr = np.loadtxt(filename, delimiter=",", dtype=str)

@@ -24,10 +24,10 @@ SEQUENCE_LENGTH = 5
 LABELS = ['inter1', 'inter2', 'inter3', 'trikonasana_final', 'trikonasana_start']
 
 CSV_FILE_PATH = 'Dataset/Yoga/Trikonasana/Annotations/'
-CSV_FILE = '10.csv'
+CSV_FILE = '7.csv'
 
-VIDEO_FILE_PATH = 'Dataset/Yoga/Trikonasana/Videos/'
-VIDEO_FILE = '10.mp4'
+VIDEO_FILE_PATH = 'Dataset/Yoga/Padahastansana/Videos/'
+VIDEO_FILE = '9.mp4'
 
 OUTPUT_FILE_PATH = 'Dataset/Yoga/Trikonasana/Output/'
-OUTPUT_FILE = 'output10.csv'
+OUTPUT_FILE = 'output7.csv'

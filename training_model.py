@@ -3,6 +3,7 @@ from model_input import data_preprocessing
 from LSTM_Model import create_model
 from keras.callbacks import EarlyStopping
 from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH
+from graph import plot_history
 
 sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
@@ -46,6 +47,7 @@ early_stopping_callback = EarlyStopping(monitor='val_loss', patience=30, mode='m
 train_history = classifier.fit(x=train_set, y=train_labels, epochs=150, batch_size=4,
                                shuffle=False, validation_split=0.2,
                                callbacks=[early_stopping_callback])
+plot_history(train_history)
 
 num_samples = test_set.shape[0] // SEQUENCE_LENGTH  # Calculate the number of samples after aggregation
 test_set = test_set[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, MODEL_INPUT)

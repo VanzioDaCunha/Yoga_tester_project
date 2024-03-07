@@ -1,6 +1,7 @@
 import cv2
 import time
 import mediapipe as mp
+from constants import VIDEO_FILE, VIDEO_FILE_PATH
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -8,9 +9,10 @@ mp_pose = mp.solutions.pose
 
 avg = 0
 count = 0
-file = 'Dataset/Yoga/Trikonasana/Videos/1.mp4'
+file = VIDEO_FILE_PATH + VIDEO_FILE
 cap = cv2.VideoCapture(file)
 with mp_pose.Pose(
+        model_complexity=0,
         min_detection_confidence=0.5,
         min_tracking_confidence=0.5) as pose:
     while cap.isOpened():
@@ -41,7 +43,6 @@ with mp_pose.Pose(
         fps = 1 / (end_time - start_time)
         avg += fps
         count += 1
-        #print(fps)
 
         if cv2.waitKey(5) & 0xFF == 27:
             break

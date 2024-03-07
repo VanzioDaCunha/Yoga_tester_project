@@ -4,6 +4,7 @@ import cv2
 import math
 import time
 from PIL import Image, ImageOps
+from constants import VIDEO_FILE_PATH, VIDEO_FILE
 
 avg = 0
 count = 0
@@ -20,7 +21,8 @@ width = input_details[0]['shape'][2]
 parts_to_compare = [(5, 6), (5, 7), (6, 8), (7, 9), (8, 10), (11, 12), (5, 11), (6, 12), (11, 13), (12, 14), (13, 15),
                     (14, 16)]
 
-cap = cv2.VideoCapture(0)
+i = VIDEO_FILE_PATH + VIDEO_FILE
+cap = cv2.VideoCapture(1)
 
 
 def parse_output(heatmap, offset, threshold):
@@ -63,38 +65,38 @@ def draw_lines(img, keypoints, pairs):
 
 
 while True:
-    sucess, img = cap.read()
+    while cap.isOpened():
+        sucess, img = cap.read()
+        start_time = time.time()
+        img = Image.fromarray(img)
+        img_resized = ImageOps.fit(img, (width, height), Image.Resampling.LANCZOS)
+        image = np.array(img_resized).reshape(height, width, 3)
+        image = np.expand_dims(image.copy(), axis=0)
 
-    start_time = time.time()
-    img = Image.fromarray(img)
-    img_resized = ImageOps.fit(img, (width, height), Image.Resampling.LANCZOS)
-    image = np.array(img_resized).reshape(height, width, 3)
-    image = np.expand_dims(image.copy(), axis=0)
+        floating_model = input_details[0]['dtype'] == np.float32
 
-    floating_model = input_details[0]['dtype'] == np.float32
+        if floating_model:
+            image = (np.float32(image) - 127.5) / 127.5
 
-    if floating_model:
-        image = (np.float32(image) - 127.5) / 127.5
+        interpreter.set_tensor(input_details[0]['index'], image)
 
-    interpreter.set_tensor(input_details[0]['index'], image)
+        interpreter.invoke()
+        output = np.squeeze(interpreter.get_tensor(output_details[0]['index']))
+        output_offset = np.squeeze(interpreter.get_tensor(output_details[1]['index']))
 
-    interpreter.invoke()
-    output = np.squeeze(interpreter.get_tensor(output_details[0]['index']))
-    output_offset = np.squeeze(interpreter.get_tensor(output_details[1]['index']))
+        temp_image = np.squeeze((image.copy() * 127.5 + 127.5) / 255.0)
+        temp_image = np.array(temp_image * 255, np.uint8)
 
-    temp_image = np.squeeze((image.copy() * 127.5 + 127.5) / 255.0)
-    temp_image = np.array(temp_image * 255, np.uint8)
+        temp_kps = parse_output(output, output_offset, 0.35)
+        cv2.imshow('image', draw_kps(temp_image.copy(), temp_kps))
+        cv2.waitKey(10)
+        draw_lines(temp_image, temp_kps, parts_to_compare)
+        cv2.imshow('image1', temp_image)
+        cv2.waitKey(10)
 
-    temp_kps = parse_output(output, output_offset, 0.35)
-    cv2.imshow('image', draw_kps(temp_image.copy(), temp_kps))
-    cv2.waitKey(10)
-    draw_lines(temp_image, temp_kps, parts_to_compare)
-    cv2.imshow('image1', temp_image)
-    cv2.waitKey(10)
-
-    end_time = time.time()
-    fps = 1 / (end_time - start_time)
-    avg += fps
-    count += 1
-    print("average fps is ", avg / count)
+        end_time = time.time()
+        fps = 1 / (end_time - start_time)
+        avg += fps
+        count += 1
+        print("average fps is ", avg / count)
 
