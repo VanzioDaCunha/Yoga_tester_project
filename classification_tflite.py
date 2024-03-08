@@ -19,7 +19,7 @@ keypoints = np.empty((1, MODEL_INPUT))
 init_time = time.time()
 
 # Load the TFLite model
-interpreter = tf.lite.Interpreter(model_path="Trikonasana.tflite")
+interpreter = tf.lite.Interpreter(model_path="Trikonasana2.tflite")
 interpreter.allocate_tensors()
 
 # Get input and output tensors
@@ -60,7 +60,6 @@ with mp_pose.Pose(
         )
 
         if count % SEQUENCE_LENGTH != 0:
-            time.sleep(0.1)
             # data = [frame_time]
             data = []
 
@@ -114,9 +113,10 @@ with mp_pose.Pose(
 
             label = interpreter.get_tensor(output_details[0]['index'])
             # to get the class label
-            cat = np.array(label[0][1])
+            cat = np.array(label[0][-1])
 
             index = np.argmax(cat)
+            # print(cat[index])
             keypoints = np.empty((1, MODEL_INPUT))
 
         text_size = 0.5

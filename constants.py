@@ -21,13 +21,15 @@ OUTPUT_FILE = 'output13.csv'
 MODEL_INPUT = 99
 CLASS_OUTPUT = 5
 SEQUENCE_LENGTH = 5
+NUMBER = '14'
+ASANA = 'Trikonasana'
 LABELS = ['inter1', 'inter2', 'inter3', 'trikonasana_final', 'trikonasana_start']
 
-CSV_FILE_PATH = 'Dataset/Yoga/Trikonasana/Annotations/'
-CSV_FILE = '7.csv'
+CSV_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Annotations/'
+CSV_FILE = NUMBER + '.csv'
 
-VIDEO_FILE_PATH = 'Dataset/Yoga/Padahastansana/Videos/'
-VIDEO_FILE = '9.mp4'
+VIDEO_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Videos/'
+VIDEO_FILE = NUMBER + '.mp4'
 
-OUTPUT_FILE_PATH = 'Dataset/Yoga/Trikonasana/Output/'
-OUTPUT_FILE = 'output7.csv'
+OUTPUT_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Output/'
+OUTPUT_FILE = 'output' + NUMBER + '.csv'

@@ -13,7 +13,8 @@ from constants import OUTPUT_FILE_PATH
 
 # Function takes csv file as an input and returns 2 Numpy arrays
 def data_preprocessing(filename):
-    filename = OUTPUT_FILE_PATH + filename
+
+    filename = OUTPUT_FILE_PATH + 'output' + str(filename) + '.csv'
     arr = []
     # Using load txt() to write data from csv file to arr list
     arr = np.loadtxt(filename, delimiter=",", dtype=str)

@@ -5,32 +5,37 @@ from keras.callbacks import EarlyStopping
 from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH
 from graph import plot_history
 
+# Gets Model values from constants file
 sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
-train_files = ['output3.csv', 'output4.csv', 'output5.csv', 'output7.csv', 'output12.csv',
-               'output13.csv', 'output2.csv', 'output8.csv', 'output10.csv']
-train_set, train_labels = data_preprocessing('output1.csv')
+# Giving the file numbers to train dataset
+train_files = [2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 15]
+train_set, train_labels = data_preprocessing(1)
 
+# Extracting the set and labels from the dataset
 for i in train_files:
     a, b = data_preprocessing(i)
     train_set = np.concatenate((train_set, a))
     train_labels = np.concatenate((train_labels, b))
 
-test_files = []
-test_set, test_labels = data_preprocessing('output11.csv')
+# Giving the file numbers to test dataset
+test_files = [14]
+test_set, test_labels = data_preprocessing(11)
 
+# Extracting the set and labels from the dataset
 for i in test_files:
     a, b = data_preprocessing(i)
     test_set = np.concatenate((test_set, a))
     test_labels = np.concatenate((test_labels, b))
 
-num_samples = train_set.shape[0] // SEQUENCE_LENGTH  # Calculate the number of samples after aggregation
+# Reshaping the data to be feed into the model
+num_samples = train_set.shape[0] // SEQUENCE_LENGTH
 train_set = train_set[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, MODEL_INPUT)
-
-num_samples = train_labels.shape[0] // SEQUENCE_LENGTH  # Calculate the number of samples after aggregation
+num_samples = train_labels.shape[0] // SEQUENCE_LENGTH
 train_labels = train_labels[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, CLASS_OUTPUT)
 
+# Shuffling the train dataset
 num_samples = train_set.shape[0]
 indices = np.arange(num_samples)
 np.random.shuffle(indices)
@@ -39,22 +44,38 @@ np.random.shuffle(indices)
 train_set = train_set[indices]
 train_labels = train_labels[indices]
 
+# Creating the Model from saved file
 ip_shape = (sequence_length, num_features)
 classifier = create_model(ip_shape)
 
-early_stopping_callback = EarlyStopping(monitor='val_loss', patience=30, mode='min', restore_best_weights=False)
+# setting an early callback to stop to avoid over fitting
+early_stopping_callback = EarlyStopping(monitor='val_loss', patience=25, mode='min', restore_best_weights=True)
 
-train_history = classifier.fit(x=train_set, y=train_labels, epochs=150, batch_size=4,
-                               shuffle=False, validation_split=0.2,
+# Training the model to train data
+train_history = classifier.fit(x=train_set, y=train_labels, epochs=150, batch_size=16,
+                               shuffle=False, validation_split=0.20,
                                callbacks=[early_stopping_callback])
+
+# plotting the graph data for training
 plot_history(train_history)
 
-num_samples = test_set.shape[0] // SEQUENCE_LENGTH  # Calculate the number of samples after aggregation
+# Reshaping the test data to be feed into the model
+num_samples = test_set.shape[0] // SEQUENCE_LENGTH
 test_set = test_set[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, MODEL_INPUT)
-
-num_samples = test_labels.shape[0] // SEQUENCE_LENGTH  # Calculate the number of samples after aggregation
+num_samples = test_labels.shape[0] // SEQUENCE_LENGTH
 test_labels = test_labels[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, CLASS_OUTPUT)
 
+# Shuffling the test dataset
+num_samples = test_set.shape[0]
+indices = np.arange(num_samples)
+np.random.shuffle(indices)
+
+# Use the shuffled indices to shuffle the data
+test_set = test_set[indices]
+test_labels = test_labels[indices]
+
+# testing unknown data on the model
 test_history = classifier.evaluate(test_set, test_labels)
 
-classifier.save('Trikonasana.keras')
+# Saving the model in keras format
+classifier.save('Trikonasana3.keras')
