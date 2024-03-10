@@ -2,15 +2,20 @@ import numpy as np
 from model_input import data_preprocessing
 from LSTM_Model import create_model
 from keras.callbacks import EarlyStopping
-from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH
-from graph import plot_history
+from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH, LABELS, MODEL_LINK
+from graph import plot_history, plot_confusion_matrix
+from sklearn import metrics
+import tensorflow as tf
+
+tf.get_logger().setLevel('INFO')
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 # Gets Model values from constants file
 sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
 # Giving the file numbers to train dataset
-train_files = [2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 15]
+train_files = [2, 3, 4, 6, 7, 8, 10, 11, 13, 15, 16]
 train_set, train_labels = data_preprocessing(1)
 
 # Extracting the set and labels from the dataset
@@ -20,8 +25,8 @@ for i in train_files:
     train_labels = np.concatenate((train_labels, b))
 
 # Giving the file numbers to test dataset
-test_files = [14]
-test_set, test_labels = data_preprocessing(11)
+test_files = [5, 14]
+test_set, test_labels = data_preprocessing(12)
 
 # Extracting the set and labels from the dataset
 for i in test_files:
@@ -77,5 +82,21 @@ test_labels = test_labels[indices]
 # testing unknown data on the model
 test_history = classifier.evaluate(test_set, test_labels)
 
+# getting the predicted labels for the test set
+y_pred = classifier.predict(test_set)
+y_pred = np.reshape(y_pred, (-1, SEQUENCE_LENGTH))
+y_pred = np.argmax(y_pred, axis=1)
+
+# reshaping the true labels to find confusion matrix
+y_true = test_labels
+y_true = np.reshape(y_true, (-1, SEQUENCE_LENGTH))
+y_true = np.argmax(y_true, axis=1)
+
+# printing confusion matrix and report
+cm = metrics.confusion_matrix(y_true, y_pred)
+print(metrics.classification_report(y_true, y_pred, digits=3))
+
+plot_confusion_matrix(cm, LABELS, normalize=True)
+
 # Saving the model in keras format
-classifier.save('Trikonasana3.keras')
+classifier.save(MODEL_LINK)
