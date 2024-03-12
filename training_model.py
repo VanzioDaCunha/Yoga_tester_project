@@ -15,7 +15,7 @@ sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
 # Giving the file numbers to train dataset
-train_files = [2, 3, 4, 6, 7, 8, 10, 11, 13, 15, 16]
+train_files = [2, 3, 4, 6, 7, 8, 10, 11, 13, 5, 16]
 train_set, train_labels = data_preprocessing(1)
 
 # Extracting the set and labels from the dataset
@@ -25,7 +25,7 @@ for i in train_files:
     train_labels = np.concatenate((train_labels, b))
 
 # Giving the file numbers to test dataset
-test_files = [5, 14]
+test_files = [15, 14]
 test_set, test_labels = data_preprocessing(12)
 
 # Extracting the set and labels from the dataset
@@ -58,7 +58,7 @@ early_stopping_callback = EarlyStopping(monitor='val_loss', patience=25, mode='m
 
 # Training the model to train data
 train_history = classifier.fit(x=train_set, y=train_labels, epochs=150, batch_size=16,
-                               shuffle=False, validation_split=0.20,
+                               shuffle=True, validation_split=0.20,
                                callbacks=[early_stopping_callback])
 
 # plotting the graph data for training
@@ -84,18 +84,19 @@ test_history = classifier.evaluate(test_set, test_labels)
 
 # getting the predicted labels for the test set
 y_pred = classifier.predict(test_set)
-y_pred = np.reshape(y_pred, (-1, SEQUENCE_LENGTH))
+y_pred = np.reshape(y_pred, (-1, CLASS_OUTPUT))
 y_pred = np.argmax(y_pred, axis=1)
 
 # reshaping the true labels to find confusion matrix
 y_true = test_labels
-y_true = np.reshape(y_true, (-1, SEQUENCE_LENGTH))
+y_true = np.reshape(y_true, (-1, CLASS_OUTPUT))
 y_true = np.argmax(y_true, axis=1)
 
 # printing confusion matrix and report
 cm = metrics.confusion_matrix(y_true, y_pred)
 print(metrics.classification_report(y_true, y_pred, digits=3))
 
+# confusion matrix
 plot_confusion_matrix(cm, LABELS, normalize=True)
 
 # Saving the model in keras format

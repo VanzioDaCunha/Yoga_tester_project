@@ -1,8 +1,9 @@
 import tensorflow as tf
 from keras.models import load_model
+from constants import MODEL_LINK, TF_MODEL_LINK
 
 # Load the Keras model
-keras_model = load_model("Trikonasana2.keras")
+keras_model = load_model(MODEL_LINK)
 
 # Convert the Keras model to TensorFlow Lite format
 converter = tf.lite.TFLiteConverter.from_keras_model(keras_model)
@@ -11,5 +12,5 @@ converter._experimental_lower_tensor_list_ops = False  # Disable experimental lo
 tflite_model = converter.convert()
 
 # Save the TensorFlow Lite model to a file
-with open("Trikonasana2.tflite", "wb") as f:
+with open(TF_MODEL_LINK, "wb") as f:
     f.write(tflite_model)

@@ -10,8 +10,8 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
-avg = 0
-count = 0
+avg: float = 0
+count: int = 0
 
 annotations = read_csv_file(CSV_FILE_PATH + CSV_FILE)
 cap = cv2.VideoCapture(VIDEO_FILE_PATH + VIDEO_FILE)

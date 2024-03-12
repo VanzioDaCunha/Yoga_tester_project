@@ -4,7 +4,7 @@ import mediapipe as mp
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from constants import MODEL_INPUT, LABELS, SEQUENCE_LENGTH
-from constants import VIDEO_FILE, VIDEO_FILE_PATH
+from constants import VIDEO_FILE, VIDEO_FILE_PATH, TF_MODEL_LINK
 import tensorflow as tf
 
 mp_drawing = mp.solutions.drawing_utils
@@ -19,7 +19,7 @@ keypoints = np.empty((1, MODEL_INPUT))
 init_time = time.time()
 
 # Load the TFLite model
-interpreter = tf.lite.Interpreter(model_path="Trikonasana2.tflite")
+interpreter = tf.lite.Interpreter(model_path=TF_MODEL_LINK)
 interpreter.allocate_tensors()
 
 # Get input and output tensors
@@ -105,7 +105,7 @@ with mp_pose.Pose(
 
             keys = np.float32(keys)
 
-            if keys.shape[1] != SEQUENCE_LENGTH:
+            if keys.shape[1] != SEQUENCE_LENGTH or keys.size == 0:
                 continue
 
             interpreter.set_tensor(input_details[0]['index'], keys)
@@ -116,7 +116,6 @@ with mp_pose.Pose(
             cat = np.array(label[0][-1])
 
             index = np.argmax(cat)
-            # print(cat[index])
             keypoints = np.empty((1, MODEL_INPUT))
 
         text_size = 0.5
