@@ -11,9 +11,9 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
-avg = 0
-count = 1
-index = 0
+avg: float = 0
+count: int = 1
+index: int = 0
 label = 'null'
 keypoints = np.empty((1, MODEL_INPUT))
 init_time = time.time()

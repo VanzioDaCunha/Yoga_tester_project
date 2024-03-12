@@ -2,10 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 
-# plt.style.use('dark_background')
 
+def plot_history(history) -> None:
+    """
+        This function plots the confusion matrix with various customization options.
 
-def plot_history(history):
+        Args:
+            history (tensor.array): The Training data of the model
+    """
     acc = history.history["accuracy"]
     loss = history.history["loss"]
     val_loss = history.history["val_loss"]
@@ -13,12 +17,14 @@ def plot_history(history):
 
     x = range(1, len(acc) + 1)
 
+    # Drawing the Model Accuracy
     plt.figure(figsize=(12, 5))
     plt.subplot(1, 2, 1)
     plt.plot(x, acc, "b", label="traning_acc")
     plt.plot(x, val_accuracy, "r", label="traning_acc")
     plt.title("Accuracy")
 
+    # Drawing the Model Loss
     plt.subplot(1, 2, 2)
     plt.plot(x, loss, "b", label="traning_acc")
     plt.plot(x, val_loss, "r", label="traning_acc")
@@ -26,7 +32,8 @@ def plot_history(history):
     plt.show()
 
 
-def plot_confusion_matrix(cm, class_names, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+def plot_confusion_matrix(cm, class_names, normalize=False,
+                          title='Confusion matrix', cmap=plt.cm.Blues) -> None:
     """
         This function plots the confusion matrix with various customization options.
 

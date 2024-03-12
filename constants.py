@@ -25,7 +25,7 @@ TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
 MODEL_INPUT: int = 99
 CLASS_OUTPUT: int = 5
 SEQUENCE_LENGTH: int = 5
-NUMBER = '1'
+NUMBER = '4'
 ASANA = 'Vrikshasana'
 LABELS = ['inter1', 'inter2', 'inter3', 'vrikshasana_final', 'vrikshasana_start']
 

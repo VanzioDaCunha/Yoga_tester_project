@@ -7,6 +7,7 @@ from graph import plot_history, plot_confusion_matrix
 from sklearn import metrics
 import tensorflow as tf
 
+# Used to remove some of the errors displayed by tensorflow
 tf.get_logger().setLevel('INFO')
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 

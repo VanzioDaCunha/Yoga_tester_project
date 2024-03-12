@@ -9,10 +9,16 @@ from keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
 from constants import MODEL_INPUT, LABELS
 from constants import OUTPUT_FILE_PATH
+from typing import Tuple
 
 
-# Function takes csv file as an input and returns 2 Numpy arrays
-def data_preprocessing(filename):
+def data_preprocessing(filename) -> Tuple[np.ndarray, np.ndarray]:
+    """
+        This Function Takes the csv file and returns the keypoints and it corresponding class
+
+        Args:
+            filename (String): The File to be Processed
+    """
 
     filename = OUTPUT_FILE_PATH + 'output' + str(filename) + '.csv'
     arr = []
@@ -21,8 +27,8 @@ def data_preprocessing(filename):
 
     # X_list to store current time along with keypoints
     # Y_list to store the activity corresponding to the current time
-    X_list = []
-    Y_list = []
+    x_list = []
+    y_list = []
     for data in arr:
         line = []
         flag = 0
@@ -31,21 +37,21 @@ def data_preprocessing(filename):
                 flag = 1
                 break
             elif i == MODEL_INPUT:
-                Y_list.append(value)
+                y_list.append(value)
             else:
                 line.append(float(value))
         if flag == 0:
-            X_list.append(line)
+            x_list.append(line)
 
     # converting list to Numpy array
-    x = np.array(X_list)
-    y = np.array(Y_list)
-    z = np.unique(y)
+    x = np.array(x_list)
+    y = np.array(y_list)
 
     # Use LabelEncoder to convert string labels to integers
     label_encoder = LabelEncoder()
     label_encoder.fit(LABELS)
 
+    # Used to encode the labels
     y = label_encoder.transform(y)
     y = to_categorical(y)
     return x, y
