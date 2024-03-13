@@ -25,7 +25,7 @@ TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
 MODEL_INPUT: int = 99
 CLASS_OUTPUT: int = 5
 SEQUENCE_LENGTH: int = 5
-NUMBER = '4'
+NUMBER = '8'
 ASANA = 'Vrikshasana'
 LABELS = ['inter1', 'inter2', 'inter3', 'vrikshasana_final', 'vrikshasana_start']
 
@@ -38,5 +38,5 @@ VIDEO_FILE = NUMBER + '.mp4'
 OUTPUT_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Output/'
 OUTPUT_FILE = 'output' + NUMBER + '.csv'
 
-MODEL_LINK = 'Models/' + ASANA + '.keras'
+MODEL_LINK = 'Models/' + ASANA + '1.keras'
 TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
