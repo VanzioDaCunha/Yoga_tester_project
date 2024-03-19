@@ -32,8 +32,8 @@ with mp_pose.Pose(
         start_time = time.time()
         image.flags.writeable = False
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image = cv2.resize(image, (500, 700))
         result = pose.process(image)
+        image = cv2.resize(image, (500, 700))
 
         image.flags.writeable = True
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
