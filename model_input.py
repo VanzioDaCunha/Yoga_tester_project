@@ -7,7 +7,7 @@ last modified: 18/02/2024 11:23
 import numpy as np
 from keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
-from constants import MODEL_INPUT, LABELS
+from constants import MODEL_INPUT, LABELS, CLASS_OUTPUT
 from constants import OUTPUT_FILE_PATH
 from typing import Tuple
 
@@ -53,5 +53,5 @@ def data_preprocessing(filename) -> Tuple[np.ndarray, np.ndarray]:
 
     # Used to encode the labels
     y = label_encoder.transform(y)
-    y = to_categorical(y)
+    y = to_categorical(y, num_classes=CLASS_OUTPUT)
     return x, y

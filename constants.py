@@ -46,8 +46,8 @@ TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
 # defined all the constants for Pavana_Muktasana
 MODEL_INPUT: int = 99
 CLASS_OUTPUT: int = 4
-SEQUENCE_LENGTH: int = 5
-NUMBER = '10'
+SEQUENCE_LENGTH: int = 6
+NUMBER = '20'
 ASANA = 'Pavana_Muktasana'
 LABELS = ['inter1', 'inter2', 'pavanam_final', 'pavanam_start']
 
