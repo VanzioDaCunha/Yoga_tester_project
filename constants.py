@@ -62,3 +62,4 @@ OUTPUT_FILE = 'output' + NUMBER + '.csv'
 
 MODEL_LINK = 'Models/' + ASANA + '.keras'
 TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
+
