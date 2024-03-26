@@ -8,9 +8,12 @@ mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
 avg = 0
-count = 0
+count = 1
 file = VIDEO_FILE_PATH + VIDEO_FILE
-cap = cv2.VideoCapture(file)
+#cap = cv2.VideoCapture(file)
+
+cap = cv2.VideoCapture('Dataset/Yoga/Tester/82.mp4')
+
 with mp_pose.Pose(
         model_complexity=0,
         min_detection_confidence=0.5,

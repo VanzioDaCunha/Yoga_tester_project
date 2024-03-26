@@ -16,8 +16,9 @@ sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
 # Giving the file numbers to train dataset
-train_files = [3, 5, 6, 7, 8, 9, 10, 13]
-train_set, train_labels = data_preprocessing(2)
+train_files = [2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 15, 21, 23,
+               24, 25, 26, 27, 30, 31, 32, 33, 34, 35]
+train_set, train_labels = data_preprocessing(1)
 
 # Extracting the set and labels from the dataset
 for i in train_files:
@@ -26,8 +27,8 @@ for i in train_files:
     train_labels = np.concatenate((train_labels, b))
 
 # Giving the file numbers to test dataset
-test_files = [11, 14]
-test_set, test_labels = data_preprocessing(4)
+test_files = [14, 22, 28]
+test_set, test_labels = data_preprocessing(13)
 
 # Extracting the set and labels from the dataset
 for i in test_files:

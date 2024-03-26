@@ -1,113 +1,106 @@
 import cv2
-import os
-from imgaug import augmenters as iaa
-import shutil
-import random
 import time
-import concurrent.futures
-
-main_folder_path = ""
-output_folder_path = ""
-no_of_clips_to_augment_per_frame = 0
-video_clip_names = []
-
-
-def augment_and_save_frames(video_reader, output_folder_path, video_clip_name, i, fps, w, h):
-    """
-        Fetch each frame of video and augment and save as picture in a temporary folder
-        Args:
-            video_reader: Video reader object
-            rotation_angle: int (Angle of rotation of image)
-            noise_value: int (noise value between 0 to 100)
-            temp_folder_path: string (temporary path to store video frames)
-            output_folder_path: string (output folder path)
-            video_clip_name: string (video name)
-            i: no of clip augmented
-    """
-
-    # These 4 lines take care of abnormal file names
-    temp = video_clip_name.replace(" ", "")
-    temp = temp.split(".")
-    editted_name = temp[0] + "_" + str(i) + "." + temp[1]
-    path_of_video_to_save = output_folder_path + "//" + editted_name
-    # Noise value to add to videos for augmentation
-    #   noise_value = random.randint(0,60)
-    if i % 2 == 0:
-        flip = True
-    else:
-        flip = False
-    noise_value = 0
-    # Rotation angle for video augmentation
-    rotation_angle = random.randint(-30, 30)
-    print("Rotation angle for augmented clip is ", rotation_angle)
-    print("Noise value to add to augmented clip is ", noise_value)
-
-    print(editted_name, rotation_angle, "degrees")
-    seq = iaa.Sequential([
-        iaa.Fliplr(flip),
-        iaa.Affine(rotate=rotation_angle)
-    ])
-
-    fourcc = 'mp4v'  # output video codec
-    video_writer = cv2.VideoWriter(path_of_video_to_save, cv2.VideoWriter_fourcc(*fourcc), fps, (w, h))
-
-    try:
-        while video_reader.isOpened():
-            ret, frame = video_reader.read()
-            if not ret:
-                break
-            image_aug = seq(image=frame)
-            video_writer.write(image_aug)
-    except Exception as e:
-        print(e)
-
-    cv2.destroyAllWindows()
-    video_reader.release()
-    video_writer.release()
+import mediapipe as mp
+from annotations_input import read_csv_file, get_time
+from annotations_output import write_key
+from constants import CSV_FILE, CSV_FILE_PATH
+from constants import VIDEO_FILE, VIDEO_FILE_PATH
+import albumentations as alb
+import random
 
 
-def augment_videos(i):
-    try:
-        video_path = f"{main_folder_path}//{video_clip_names[clip_no]}"
-        video_reader = cv2.VideoCapture(video_path)
-        fps = int(video_reader.get(cv2.CAP_PROP_FPS))
-        w = int(video_reader.get(cv2.CAP_PROP_FRAME_WIDTH))
-        h = int(video_reader.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        # Get fps for input video
-        print(f"FPS of {video_clip_names[clip_no]} is {fps}")
-        start = time.time()
-        augment_and_save_frames(video_reader, output_folder_path, video_clip_names[clip_no], i, fps, w, h)
-        end = time.time()
-        print("Total time taken by single video", end - start)
-    except Exception as e:
-        print(e)
+def transform_keypoints(results, width, height):
+    keypoints = []
+    if results.pose_landmarks:
+        for landmark in results.pose_landmarks.landmark:
+            x = max(0, min(landmark.x, 0.999999))
+            y = max(0, min(landmark.y, 0.999999))
+            x = int(float(x) * width)
+            y = int(float(y) * height)
+            data = [x, y]
+            keypoints.append(tuple(data))
+
+    return keypoints
 
 
-time_of_code = time.time()
-if __name__ == '__main__':
+def augment_keypoints(frame, keypoints):
+    random.seed(22)
+    transform = alb.Compose(
+        [
+            alb.Rotate(limit=1.5, p=1),
+            alb.HorizontalFlip(p=0.5),
+         ],
+        keypoint_params=alb.KeypointParams(format='xy')
+    )
 
-    main_folder_path = 'Dataset'
-    output_folder_path = 'Models'
-    no_of_clips_to_augment_per_frame = 1
+    transformed = transform(image=frame, keypoints=keypoints)
+    return transformed['image'], transformed['keypoints']
 
-    print("Output folder path", output_folder_path)
-    print("Main folder path", main_folder_path)
-    print("Max augmented clips", no_of_clips_to_augment_per_frame)
 
-    if os.path.exists(output_folder_path) and os.path.isdir(output_folder_path):
-        shutil.rmtree(output_folder_path)
-    os.makedirs(output_folder_path, exist_ok=True)
+def format_keypoints(keypoint, results):
+    if results.pose_landmarks and len(keypoint) == 33:
+        i = 0
+        for landmark in results.pose_landmarks.landmark:
+            landmark.x = float(keypoint[i][0]) / 500
+            landmark.y = float(keypoint[i][1]) / 700
+            i += 1
+    return results
 
-    video_clip_names = os.listdir(main_folder_path)
-    print(f"Videos found are {video_clip_names}")
-    no_of_clips_available = len(video_clip_names)
 
-    # Run for each clip that needs to be augmented
-    for clip_no in range(no_of_clips_available):
-        # Rotate the clip based on angle range and increment the subsequent clips w.r.t. the angle increment
-        print("No. of videos to be augmented per input", no_of_clips_to_augment_per_frame)
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            executor.map(augment_videos, list(range(no_of_clips_to_augment_per_frame)))
+mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
+mp_pose = mp.solutions.pose
+avg: float = 0
+count: int = 0
 
-    end_time = time.time()
-    print("Full time by code", end_time - time_of_code)
+cap = cv2.VideoCapture(VIDEO_FILE_PATH + VIDEO_FILE)
+annotations = read_csv_file(CSV_FILE_PATH + CSV_FILE)
+
+with mp_pose.Pose(
+        model_complexity=0,
+        min_detection_confidence=0.5,
+        min_tracking_confidence=0.7) as pose:
+    while cap.isOpened():
+
+        success, image = cap.read()
+        if not success:
+            print("no video in frame")
+            break
+
+        frame_time = cap.get(0) / 1000
+        activity = get_time(annotations, frame_time)
+
+        start_time = time.time()
+        image.flags.writeable = False
+
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        result = pose.process(image)
+        image = cv2.resize(image, (500, 700))
+
+        pl = transform_keypoints(result, 500, 700)
+        image, keys = augment_keypoints(image, pl)
+        keys = format_keypoints(keys, result)
+
+        image.flags.writeable = True
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+        mp_drawing.draw_landmarks(
+            image,
+            keys.pose_landmarks,
+            mp_pose.POSE_CONNECTIONS,
+            landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style()
+        )
+
+        write_key(result, frame_time, activity)
+
+        cv2.imshow('media pipe pose', cv2.flip(image, 1))
+        end_time = time.time()
+        fps = 1 / (end_time - start_time)
+        avg += fps
+        count += 1
+
+        if cv2.waitKey(5) & 0xFF == 27:
+            break
+
+print("average fps is ", avg / count)
+cap.release()
