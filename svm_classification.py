@@ -61,6 +61,5 @@ print("F1-score:", f1)
 # Confusion Matrix
 conf_matrix = confusion_matrix(y_test, y_pred)
 print("Confusion Matrix:")
-print(conf_matrix)
 
 plot_confusion_matrix(conf_matrix, LABELS, normalize=True)

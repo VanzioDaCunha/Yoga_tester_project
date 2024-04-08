@@ -4,6 +4,7 @@ from LSTM_Model import create_model
 from keras.callbacks import EarlyStopping
 from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH, LABELS, MODEL_LINK
 from graph import plot_history, plot_confusion_matrix
+from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import tensorflow as tf
 
@@ -16,40 +17,31 @@ sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
 # Giving the file numbers to train dataset
-train_files = [2, 3, 4, 5, 6, 7, 8, 10, 12, 21,
-               24, 25, 26, 27, 30, 32]
-train_set, train_labels = data_preprocessing(1)
+train_set = []
+train_labels = []
+
+train_files = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 21,
+               22, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35]
 
 # Extracting the set and labels from the dataset
 for i in train_files:
     a, b = data_preprocessing(i)
-    train_set = np.concatenate((train_set, a))
-    train_labels = np.concatenate((train_labels, b))
 
-# Giving the file numbers to test dataset
-test_files = [22, 28, 12]
-test_set, test_labels = data_preprocessing(23)
+    remove_elements = len(a) % sequence_length
+    if remove_elements > 0:
+        a = a[:-remove_elements]
+        b = b[:-remove_elements]
 
-# Extracting the set and labels from the dataset
-for i in test_files:
-    a, b = data_preprocessing(i)
-    test_set = np.concatenate((test_set, a))
-    test_labels = np.concatenate((test_labels, b))
+    num_batch = len(a) // SEQUENCE_LENGTH
+    data_batch = np.array_split(a, num_batch)
+    train_set.extend(data_batch)
+    data_labels = np.array_split(b, num_batch)
+    train_labels.extend(data_labels)
 
-# Reshaping the data to be feed into the model
-num_samples = train_set.shape[0] // SEQUENCE_LENGTH
-train_set = train_set[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, MODEL_INPUT)
-num_samples = train_labels.shape[0] // SEQUENCE_LENGTH
-train_labels = train_labels[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, CLASS_OUTPUT)
+train_set = np.array(train_set)
+train_labels = np.array(train_labels)
 
-# Shuffling the train dataset
-num_samples = train_set.shape[0]
-indices = np.arange(num_samples)
-np.random.shuffle(indices)
-
-# Use the shuffled indices to shuffle the data
-train_set = train_set[indices]
-train_labels = train_labels[indices]
+train_set, test_set, train_labels, test_labels = train_test_split(train_set, train_labels, test_size=0.25, random_state=29)
 
 # Creating the Model from saved file
 ip_shape = (sequence_length, num_features)
@@ -65,21 +57,6 @@ train_history = classifier.fit(x=train_set, y=train_labels, epochs=150, batch_si
 
 # plotting the graph data for training
 plot_history(train_history)
-
-# Reshaping the test data to be feed into the model
-num_samples = test_set.shape[0] // SEQUENCE_LENGTH
-test_set = test_set[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, MODEL_INPUT)
-num_samples = test_labels.shape[0] // SEQUENCE_LENGTH
-test_labels = test_labels[:num_samples * SEQUENCE_LENGTH].reshape(-1, SEQUENCE_LENGTH, CLASS_OUTPUT)
-
-# Shuffling the test dataset
-num_samples = test_set.shape[0]
-indices = np.arange(num_samples)
-np.random.shuffle(indices)
-
-# Use the shuffled indices to shuffle the data
-test_set = test_set[indices]
-test_labels = test_labels[indices]
 
 # testing unknown data on the model
 test_history = classifier.evaluate(test_set, test_labels)
@@ -102,4 +79,4 @@ print(metrics.classification_report(y_true, y_pred, digits=3))
 plot_confusion_matrix(cm, LABELS, normalize=True)
 
 # Saving the model in keras format
-classifier.save(MODEL_LINK)
+#classifier.save(MODEL_LINK)
