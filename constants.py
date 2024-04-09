@@ -23,7 +23,7 @@ TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
 
 """
 
-
+"""
 # defined all the constants for Vrikshasana
 MODEL_INPUT: int = 99
 CLASS_OUTPUT: int = 5
@@ -43,7 +43,7 @@ OUTPUT_FILE = 'output' + str(int(NUMBER) + 20) + '.csv'
 
 MODEL_LINK = 'Models/' + ASANA + '.keras'
 TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
-
+"""
 
 
 """
@@ -110,10 +110,10 @@ OUTPUT_FILE = 'output' + NUMBER + '.csv'
 
 MODEL_LINK = 'Models/' + ASANA + '.keras'
 TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
-
 """
 
-"""
+
+
 # defined all the constants for Ardha_Ustrasana
 MODEL_INPUT: int = 99
 CLASS_OUTPUT: int = 5
@@ -135,7 +135,6 @@ OUTPUT_FILE = 'output' + str(int(NUMBER) + 20) + '.csv'
 MODEL_LINK = 'Models/' + ASANA + '.keras'
 TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
 
-"""
 """
 # defined all the constants for 
 MODEL_INPUT: int = 99

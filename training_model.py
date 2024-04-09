@@ -20,8 +20,8 @@ num_features = MODEL_INPUT
 train_set = []
 train_labels = []
 
-train_files = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 21,
-               22, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35]
+train_files = [1, 2, 3, 4, 5, 6, 7, 8, 10, 12,  21,
+               22, 23, 24, 25, 26, 27, 28, 30, 32]
 
 # Extracting the set and labels from the dataset
 for i in train_files:

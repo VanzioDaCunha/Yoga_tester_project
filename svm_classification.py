@@ -18,8 +18,8 @@ sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
 # Giving the file numbers to train dataset
-all_files = [2, 3, 4, 5, 6, 7, 8, 10, 12, 21,
-             24, 25, 26, 27, 30, 32]
+all_files = [1, 2, 3, 4, 5, 6, 7, 8, 10, 12,  21,
+               22, 23, 24, 25, 26, 27, 28, 30, 32]
 train_set, train_labels = data_preprocessing(1)
 
 # Extracting the set and labels from the dataset
@@ -28,8 +28,6 @@ for i in all_files:
     train_set = np.concatenate((train_set, a))
     train_labels = np.concatenate((train_labels, b))
 
-print(train_set.shape)
-print(train_labels.shape)
 
 if len(train_labels.shape) > 1:
     train_labels = np.argmax(train_labels, axis=1)
