@@ -7,6 +7,7 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dense, TimeDistributed, Conv1D, MaxPooling1D, Flatten, Reshape
 import tensorflow as tf
 import heapq
+import csv
 
 
 def create_model(input_shape, optimizer='adam', filters=32, activation='relu', nodes=64):
@@ -63,6 +64,12 @@ for params in ParameterGrid(param_grid):
     loss, accuracy = model.evaluate(test_set, test_labels, verbose=0)
     print("Test loss:", loss)
     print("Test accuracy:", accuracy)
+
+    data = [params, accuracy, loss]
+
+    with open('hyperparams.csv', 'a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(data)
 
     # Add current result to heap
     heapq.heappush(best_results_heap, (accuracy, params))
