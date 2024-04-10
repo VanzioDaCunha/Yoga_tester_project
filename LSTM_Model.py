@@ -31,7 +31,7 @@ def create_model(input_shape):
     # This line builds the model architecture
     model.compile(optimizer=Adam(), loss=sparse, metrics=['accuracy'])
 
-    print(model.summary())
+    # print(model.summary())
 
     return model
 

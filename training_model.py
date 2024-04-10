@@ -1,11 +1,9 @@
 import numpy as np
-import os
-from model_input import data_preprocessing
 from LSTM_Model import create_model
 from keras.callbacks import EarlyStopping
 from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH, LABELS, MODEL_LINK, OUTPUT_FILE_PATH
 from graph import plot_history, plot_confusion_matrix
-from sklearn.model_selection import train_test_split
+from prepare_dataset import batched_dataset
 from sklearn import metrics
 import tensorflow as tf
 
@@ -17,32 +15,8 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
 
-# Giving the file numbers to train dataset
-train_set = []
-train_labels = []
-
-folder_path = OUTPUT_FILE_PATH
-folder = filenames = [filename for filename in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, filename))]
-
-# Extracting the set and labels from the dataset
-for i in folder:
-    a, b = data_preprocessing(i)
-
-    remove_elements = len(a) % sequence_length
-    if remove_elements > 0:
-        a = a[:-remove_elements]
-        b = b[:-remove_elements]
-
-    num_batch = len(a) // SEQUENCE_LENGTH
-    data_batch = np.array_split(a, num_batch)
-    train_set.extend(data_batch)
-    data_labels = np.array_split(b, num_batch)
-    train_labels.extend(data_labels)
-
-train_set = np.array(train_set)
-train_labels = np.array(train_labels)
-
-train_set, test_set, train_labels, test_labels = train_test_split(train_set, train_labels, test_size=0.25, random_state=29)
+# retrieve the dataset from the csv files
+train_set, test_set, train_labels, test_labels = batched_dataset()
 
 # Creating the Model from saved file
 ip_shape = (sequence_length, num_features)

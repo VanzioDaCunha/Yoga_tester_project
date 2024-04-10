@@ -8,7 +8,6 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from graph import plot_confusion_matrix
 
-# Evaluate accuracy
 
 # Used to remove some of the errors displayed by tensorflow
 tf.get_logger().setLevel('INFO')
@@ -22,7 +21,7 @@ num_features = MODEL_INPUT
 train_set = []
 train_labels = []
 folder_path = OUTPUT_FILE_PATH
-folder = filenames = [filename for filename in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, filename))]
+folder = [filename for filename in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, filename))]
 
 # Extracting the set and labels from the dataset
 for i in folder:
