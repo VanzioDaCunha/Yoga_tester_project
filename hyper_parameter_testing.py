@@ -65,7 +65,11 @@ for params in ParameterGrid(param_grid):
     print("Test loss:", loss)
     print("Test accuracy:", accuracy)
 
-    data = [params, accuracy, loss]
+    data = []
+    for i in params:
+        data.append(params[i])
+    data.append(accuracy)
+    data.append(loss)
 
     with open('hyperparams.csv', 'a', newline='') as file:
         writer = csv.writer(file)
