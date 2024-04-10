@@ -1,8 +1,9 @@
 import numpy as np
+import os
 from model_input import data_preprocessing
 from LSTM_Model import create_model
 from keras.callbacks import EarlyStopping
-from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH, LABELS, MODEL_LINK
+from constants import MODEL_INPUT, CLASS_OUTPUT, SEQUENCE_LENGTH, LABELS, MODEL_LINK, OUTPUT_FILE_PATH
 from graph import plot_history, plot_confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
@@ -20,11 +21,11 @@ num_features = MODEL_INPUT
 train_set = []
 train_labels = []
 
-train_files = [1, 2, 3, 4, 5, 6, 7, 8, 10, 12,  21,
-               22, 23, 24, 25, 26, 27, 28, 30, 32]
+folder_path = OUTPUT_FILE_PATH
+folder = filenames = [filename for filename in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, filename))]
 
 # Extracting the set and labels from the dataset
-for i in train_files:
+for i in folder:
     a, b = data_preprocessing(i)
 
     remove_elements = len(a) % sequence_length

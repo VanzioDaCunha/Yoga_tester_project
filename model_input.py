@@ -20,7 +20,7 @@ def data_preprocessing(filename) -> Tuple[np.ndarray, np.ndarray]:
             filename (String): The File to be Processed
     """
 
-    filename = OUTPUT_FILE_PATH + 'output' + str(filename) + '.csv'
+    filename = OUTPUT_FILE_PATH + str(filename)
     arr = []
     # Using load txt() to write data from csv file to arr list
     arr = np.loadtxt(filename, delimiter=",", dtype=str)
