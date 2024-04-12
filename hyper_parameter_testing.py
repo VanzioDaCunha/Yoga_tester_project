@@ -6,7 +6,6 @@ from keras.losses import categorical_crossentropy as sparse
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, TimeDistributed, Conv1D, MaxPooling1D, Flatten, Reshape
 import tensorflow as tf
-import heapq
 import csv
 
 
@@ -74,15 +73,3 @@ for params in ParameterGrid(param_grid):
     with open('hyperparams.csv', 'a', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(data)
-
-    # Add current result to heap
-    heapq.heappush(best_results_heap, (accuracy, params))
-
-    # Keep only the best 3 results
-    if len(best_results_heap) > 3:
-        heapq.heappop(best_results_heap)
-
-# Print the best 3 results
-print("Best 3 results:")
-for i, (acc, params) in enumerate(sorted(best_results_heap, reverse=True)):
-    print(f"Rank {i + 1}: Accuracy={acc}, Parameters={params}")

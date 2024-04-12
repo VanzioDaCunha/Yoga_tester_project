@@ -20,10 +20,10 @@ def create_model(input_shape):
     #####################################################################################
 
     model.add(Reshape((SEQUENCE_LENGTH, MODEL_INPUT, 1), input_shape=input_shape))
-    model.add(TimeDistributed(Conv1D(filters=32, kernel_size=3, activation='relu')))
+    model.add(TimeDistributed(Conv1D(filters=64, kernel_size=3, activation='tanh')))
     model.add(TimeDistributed(MaxPooling1D(pool_size=2)))
     model.add(TimeDistributed(Flatten()))
-    model.add(LSTM(units=64, return_sequences=True))
+    model.add(LSTM(units=16, return_sequences=True))
     model.add(Dense(units=CLASS_OUTPUT, activation='softmax'))
 
     ######################################################################################
