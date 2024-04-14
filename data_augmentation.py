@@ -28,7 +28,7 @@ def augment_keypoints(frame, keypoints):
     transform = alb.Compose(
         [
             alb.Rotate(limit=1.5, p=1),
-            alb.HorizontalFlip(p=0.5),
+            alb.HorizontalFlip(p=1),
          ],
         keypoint_params=alb.KeypointParams(format='xy')
     )

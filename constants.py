@@ -3,9 +3,9 @@ NEW_VIDEO_COUNT: int = 10
 
 # define all constants FOR Trikonasana
 MODEL_INPUT = 99
+SEQUENCE_LENGTH = 2
 CLASS_OUTPUT = 5
-SEQUENCE_LENGTH = 5
-NUMBER = '16'
+NUMBER = '7'
 ASANA = 'Trikonasana'
 LABELS = ['inter1', 'inter2', 'inter3', 'trikonasana_final', 'trikonasana_start']
 
