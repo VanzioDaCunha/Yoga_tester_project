@@ -1,11 +1,11 @@
 NEW_VIDEO_COUNT: int = 10
 
-
+"""
 # define all constants FOR Trikonasana
 MODEL_INPUT = 99
-SEQUENCE_LENGTH = 2
+SEQUENCE_LENGTH = 3
 CLASS_OUTPUT = 5
-NUMBER = '7'
+NUMBER = '11'
 ASANA = 'Trikonasana'
 LABELS = ['inter1', 'inter2', 'inter3', 'trikonasana_final', 'trikonasana_start']
 
@@ -20,15 +20,15 @@ OUTPUT_FILE = 'output' + str(int(NUMBER) + 20) + '.csv'
 
 MODEL_LINK = 'Models/' + ASANA + '.keras'
 TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
-
-
-
 """
+
+
+
 # defined all the constants for Vrikshasana
 MODEL_INPUT: int = 99
 CLASS_OUTPUT: int = 5
-SEQUENCE_LENGTH: int = 5
-NUMBER = '3'
+SEQUENCE_LENGTH: int = 2
+NUMBER = '8'
 ASANA = 'Vrikshasana'
 LABELS = ['inter1', 'inter2', 'inter3', 'vrikshasana_final', 'vrikshasana_start']
 
@@ -43,7 +43,7 @@ OUTPUT_FILE = 'output' + str(int(NUMBER) + 20) + '.csv'
 
 MODEL_LINK = 'Models/' + ASANA + '.keras'
 TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
-"""
+
 
 
 """
@@ -72,7 +72,7 @@ TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
 # defined all the constants for Tadasana
 MODEL_INPUT: int = 99
 CLASS_OUTPUT: int = 4
-SEQUENCE_LENGTH: int = 5
+SEQUENCE_LENGTH: int = 2
 NUMBER = '14'
 ASANA = 'Tadasana'
 LABELS = ['inter1', 'inter2', 'tadasana_final', 'tadasana_start']

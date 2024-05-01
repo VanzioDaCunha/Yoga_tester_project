@@ -50,6 +50,7 @@ with mp_pose.Pose(
 
         # Displays the result to the Screen
         cv2.imshow('media pipe pose', cv2.flip(image, 1))
+        print(count)
 
         # Calculate the Average fps of the model
         end_time = time.time()

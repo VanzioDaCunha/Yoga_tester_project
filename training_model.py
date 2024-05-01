@@ -54,4 +54,4 @@ print(metrics.classification_report(y_true, y_pred, digits=3))
 plot_confusion_matrix(cm, LABELS, normalize=True)
 
 # Saving the model in keras format
-#classifier.save(MODEL_LINK)
+classifier.save(MODEL_LINK)
