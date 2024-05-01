@@ -7,10 +7,6 @@ from prepare_dataset import batched_dataset
 from sklearn import metrics
 import tensorflow as tf
 
-# Used to remove some of the errors displayed by tensorflow
-tf.get_logger().setLevel('INFO')
-tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-
 # Gets Model values from constants file
 sequence_length = SEQUENCE_LENGTH
 num_features = MODEL_INPUT
