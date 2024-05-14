@@ -11,4 +11,4 @@ converter.target_spec.supported_ops = [
   tf.lite.OpsSet.SELECT_TF_OPS # enable TensorFlow ops.
 ]
 tflite_model = converter.convert()
-open("converted_model.tflite", "wb").write(tflite_model)
+open(TF_MODEL_LINK, "wb").write(tflite_model)

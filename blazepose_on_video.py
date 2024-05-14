@@ -14,7 +14,8 @@ avg: float = 0
 count: int = 0
 
 annotations = read_csv_file(CSV_FILE_PATH + CSV_FILE)
-cap = cv2.VideoCapture(VIDEO_FILE_PATH + VIDEO_FILE)
+# cap = cv2.VideoCapture(VIDEO_FILE_PATH + VIDEO_FILE)
+cap = cv2.VideoCapture(0)
 
 with mp_pose.Pose(
         model_complexity=0,
@@ -50,7 +51,7 @@ with mp_pose.Pose(
 
         # Displays the result to the Screen
         cv2.imshow('media pipe pose', cv2.flip(image, 1))
-        print(count)
+        # print(count)
 
         # Calculate the Average fps of the model
         end_time = time.time()

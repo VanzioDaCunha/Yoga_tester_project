@@ -39,4 +39,3 @@ def create_model(input_shape):
     # print(model.summary())
 
     return model
-
