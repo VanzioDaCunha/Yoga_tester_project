@@ -1,7 +1,7 @@
 NEW_VIDEO_COUNT: int = 10
 MODEL_INPUT: int = 99
 SEQUENCE_LENGTH: int = 2
-NUMBER = '20'
+NUMBER = '10'
 
 """
 # define all constants FOR Trikonasana
@@ -43,7 +43,7 @@ TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
 """
 
 
-
+"""
 # defined all the constants for Pavana_Muktasana
 CLASS_OUTPUT: int = 4
 ASANA = 'Pavana_Muktasana'
@@ -61,6 +61,7 @@ OUTPUT_FILE = 'output' + str(int(NUMBER) + 20) + '.csv'
 MODEL_LINK = 'Models/' + ASANA + '.keras'
 TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
 
+"""
 
 """
 # defined all the constants for Tadasana
@@ -114,8 +115,10 @@ VIDEO_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Videos/'
 VIDEO_FILE = NUMBER + '.mp4'
 
 OUTPUT_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Output/'
+# data augmentation
 OUTPUT_FILE = 'output' + str(int(NUMBER) + 20) + '.csv'
-# OUTPUT_FILE = 'output' + NUMBER + '.csv'
+# blazepose on video
+# OUTPUT_FILE = 'output' + NUMBER + '.csv' 
 
 MODEL_LINK = 'Models/' + ASANA + '.keras'
 TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
@@ -165,3 +168,67 @@ OUTPUT_FILE = 'output' + NUMBER + '.csv'
 MODEL_LINK = 'Models/' + ASANA + '.keras'
 TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
 """
+
+"""
+# defined all the constants for Lunges
+CLASS_OUTPUT: int = 3
+ASANA = 'Lunges'
+LABELS = ['Inter1', 'Lunges_final', 'Lunges_start']
+
+CSV_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Annotations/'
+CSV_FILE = NUMBER + '.csv'
+
+VIDEO_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Videos/'
+VIDEO_FILE = NUMBER + '.mp4'
+
+OUTPUT_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Output/'
+# data augmentation
+OUTPUT_FILE = 'output' + str(int(NUMBER) + 20) + '.csv'
+# blazepose on video
+# OUTPUT_FILE = 'output' + NUMBER + '.csv'
+
+MODEL_LINK = 'Models/' + ASANA + '.keras'
+TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
+"""
+
+"""
+# defined all the constants for Pushups
+CLASS_OUTPUT: int = 4
+ASANA = 'Pushups'
+LABELS = ['Inter1', 'Inter2', 'Pushups_final', 'Pushups_start']
+
+CSV_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Annotations/'
+CSV_FILE = NUMBER + '.csv'
+
+VIDEO_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Videos/'
+VIDEO_FILE = NUMBER + '.mp4'
+
+OUTPUT_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Output/'
+# data augmentation
+#OUTPUT_FILE = 'output' + str(int(NUMBER) + 20) + '.csv'
+# blazepose on video
+OUTPUT_FILE = 'output' + NUMBER + '.csv'
+
+MODEL_LINK = 'Models/' + ASANA + '.keras'
+TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
+
+"""
+# defined all the constants for Squats
+CLASS_OUTPUT: int = 3
+ASANA = 'Squats'
+LABELS = ['Inter1', 'Squats_final', 'Squats_start']
+
+CSV_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Annotations/'
+CSV_FILE = NUMBER + '.csv'
+
+VIDEO_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Videos/'
+VIDEO_FILE = NUMBER + '.mp4'
+
+OUTPUT_FILE_PATH = 'Dataset/Yoga/' + ASANA + '/Output/'
+# data augmentation
+OUTPUT_FILE = 'output' + str(int(NUMBER) + 20) + '.csv'
+# blazepose on video
+#OUTPUT_FILE = 'output' + NUMBER + '.csv'
+
+MODEL_LINK = 'Models/' + ASANA + '.keras'
+TF_MODEL_LINK = 'Models/' + ASANA + '.tflite'
